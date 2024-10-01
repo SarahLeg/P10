@@ -1,12 +1,54 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from './api';
+import axios from 'axios';
 
 const initialState = {
-  user: {},
-  token: null,
-  loading: false,
-  error: null,
+  user: {},           // Contient les informations de l'utilisateur
+  token: null,        // Token de l'utilisateur
+  loading: false,     // Indicateur de chargement
+  error: null,        // Gestion des erreurs
 };
+
+// Thunk pour la connexion de l'utilisateur
+export const loginUser = createAsyncThunk(
+  'userSlice/loginUser',
+  async (userData) => {
+    const { data } = await axios.post(
+      'http://localhost:3001/api/v1/user/login',
+      userData
+    );
+    return data.body;  // On retourne le corps de la réponse contenant le token
+  }
+);
+
+// Thunk pour obtenir les informations de l'utilisateur
+export const getUser = createAsyncThunk(
+  'userSlice/getUser',
+  async (token) => {
+    const { data } = await axios.get('http://localhost:3001/api/v1/user/profile', {
+      headers: {
+        Authorization: `Bearer ${token}`,  // Correction : Utilisation des backticks pour les templates de chaînes
+      },
+    });
+    return data.body;  // On retourne les informations de l'utilisateur
+  }
+);
+
+// Thunk pour mettre à jour l'utilisateur
+export const updateUser = createAsyncThunk(
+  'userSlice/updateUser',
+  async ({ username, token }) => {
+    const { data } = await axios.put(
+      'http://localhost:3003/api/v1/user/profile', // Mettez l'URL correcte
+      { username },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // En-tête avec le token
+        },
+      }
+    );
+    return data.body; // Retourne les données mises à jour
+  }
+);
 
 // Créer un slice pour l'utilisateur
 const userSlice = createSlice({
@@ -14,48 +56,53 @@ const userSlice = createSlice({
   initialState,
 
   reducers: {
-    loginStart: (state) => {
-      state.loading = true;
-    },
-    loginSuccess: (state, action) => {
-      state.loading = false;
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-    },
-    loginFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
     logout: (state) => {
-      state.user = null;
-      state.token = null
-      localStorage.clear();
-      
+      state.user = {};
+      state.token = null;
+      localStorage.clear();  // Supprime tout du localStorage
+      state.loading = false;
+      state.error = null;
     },
   },
+
   extraReducers: (builder) => {
+    // Gestion du pending pour `getUser`
+    builder.addCase(getUser.pending, (state) => {
+      state.loading = true;  // Indique que la requête est en cours
+      state.error = null;    // Réinitialisation de l'erreur
+    });
+
+    // Gestion du fulfilled pour `getUser`
+    builder.addCase(getUser.fulfilled, (state, action) => {
+      state.loading = false;            // La requête est terminée
+      state.user = action.payload;      // Mise à jour des informations de l'utilisateur
+      state.error = null;    // Réinitialisation de l'erreur
+    });
+
+    // Gestion du rejected pour `getUser`
+    builder.addCase(getUser.rejected, (state, action) => {
+      state.loading = false;            // Arrête le chargement en cas d'erreur
+      state.error = action.error.message;  // Stocke le message d'erreur
+    });
+
+    // Gestion du fulfilled pour `loginUser`
+    builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.token = action.payload.token;   // Stockage du token
+      localStorage.setItem('token', action.payload.token);  // Stockage du token dans le localStorage
+      state.error = null;  // Réinitialisation de l'erreur
+      state.loading = false;  // Arrête le chargement
+    });
+
+    // Gestion du rejected pour `loginUser`
+    builder.addCase(loginUser.rejected, (state, action) => {
+      state.token = null;  // Supprime le token en cas d'erreur
+      localStorage.clear();  // Supprime les données du localStorage
+      state.error = action.error.message;  // Stocke le message d'erreur
+      state.loading = false;  // Arrête le chargement
+      console.log(state.error);  // Affiche l'erreur dans la console
+    });
   },
 });
 
-// Actions générées automatiquement par createSlice
-export const { loginStart, loginSuccess, loginFailure, logout } = userSlice.actions;
-
-// Sélecteurs pour récupérer l'utilisateur et le token depuis le state
-export const selectUser = (state) => state.user.user;
-export const selectToken = (state) => state.user.token;
-
-// Action asynchrone pour effectuer la connexion
-export const loginUser = (credentials) => async (dispatch) => {
-  dispatch(loginStart());
-  try {
-    const response = await api.post('/user/login', credentials);
-    dispatch(loginSuccess({ user: response.data.body.user, token: response.data.body.token }));
-    localStorage.setItem('token', response.data.body.token);
-  } catch (error) {
-    console.error('Error during login:', error.response); // Affichez l'erreur complète pour le diagnostic
-    dispatch(loginFailure(error.response?.data?.message || 'Unknown error'));
-  }
-};
-
-// Exporter le reducer
+export const { logout } = userSlice.actions;
 export default userSlice.reducer;

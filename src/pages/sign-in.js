@@ -15,9 +15,10 @@ function SignIn() {
 
     // Envoi de la requête de connexion
     dispatch(loginUser({ email, password }))
-      .then(() => {
+      .then((rep) => {
+        console.log(rep.payload);
         // Redirection vers la page des comptes après une connexion réussie
-        navigate('/accounts');
+        navigate('/dashboard');
       })
       .catch((err) => {
         // Gestion des erreurs
