@@ -36,10 +36,10 @@ export const getUser = createAsyncThunk(
 // Thunk pour mettre à jour l'utilisateur
 export const updateUser = createAsyncThunk(
   'userSlice/updateUser',
-  async ({ username, token }) => {
+  async ({ userName, token }) => {
     const { data } = await axios.put(
       'http://localhost:3001/api/v1/user/profile', 
-      { username },
+      { userName },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -85,6 +85,8 @@ const userSlice = createSlice({
       state.error = action.error.message;  // Stocke le message d'erreur
     });
 
+
+
     // Gestion du fulfilled pour `loginUser`
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.token = action.payload.token;   // Stockage du token
@@ -100,6 +102,24 @@ const userSlice = createSlice({
       state.error = action.error.message;  // Stocke le message d'erreur
       state.loading = false;  // Arrête le chargement
       console.log(state.error);  // Affiche l'erreur dans la console
+    });
+
+
+
+    // Gestion du fulfilled pour `updateUser`
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.user = {
+        ...state.user,   // Conserve les autres informations de l'utilisateur
+        userName: action.payload.userName // Met à jour uniquement le nom d'utilisateur
+      };
+      state.loading = false;  // Arrête le chargement
+      state.error = null;  // Réinitialisation de l'erreur
+    });
+
+    // Gestion des erreurs dans `updateUser` si besoin
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.loading = false;            // Arrête le chargement en cas d'erreur
+      state.error = action.error.message;  // Stocke le message d'erreur
     });
   },
 });

@@ -4,12 +4,12 @@ import { updateUser } from '../Redux/userSlice';
 
 function EditUser({ user, token }) {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState(user.username || '');
+  const [userName, setUsername] = useState(user.userName || '');
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = () => {
-    console.log("Saving username:", username);
-    dispatch(updateUser({ username, token }));
+    console.log("Saving userName:", userName);
+    dispatch(updateUser({ userName, token }));
     setIsEditing(false);
   };
 
@@ -27,7 +27,7 @@ function EditUser({ user, token }) {
             User name : 
             <input
               type="text"
-              value={username}
+              value={userName}
               onChange={(e) => setUsername(e.target.value)} // Modifiable
             />
           </label>

@@ -14,6 +14,9 @@ function Layout() {
   const user = useSelector((state) => state.user.user);
   const token = useSelector((state) => state.user.token);
 
+  console.log('user:', user); 
+  console.log('userName:', user.userName);
+
   const handleLogout = () => {
     dispatch(logout());
     navigate('/');
@@ -34,18 +37,18 @@ function Layout() {
         <div>
           {token ? (
             <>
-              <a className="main-nav-item">
+              <span className="main-nav-item">
                 <img src={userIcon} alt="User Icon"/>
-                {user.username}
-              </a>
+                {user.userName || 'Loading...'}
+              </span>
 
-              <a className="main-nav-item">
+              <span className="main-nav-item">
                 <img src={optionsIcon} alt="Options"/>
-              </a>
+              </span>
 
-              <a onClick={handleLogout} className="main-nav-item">
+              <span onClick={handleLogout} className="main-nav-item">
                 <img src={signoutIcon} alt="Sign Out"/>
-              </a>
+              </span>
             </>
           ) : (
             <Link className="main-nav-item" to="/sign-in">
