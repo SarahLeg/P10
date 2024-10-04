@@ -4,8 +4,8 @@ import { updateUser } from '../Redux/userSlice';
 
 function EditUser({ user, token }) {
   const dispatch = useDispatch();
-  const [username, setUsername] = useState(user.username || ''); // Initialise le pseudo
-  const [isEditing, setIsEditing] = useState(false); // Gérer l'état de l'édition
+  const [username, setUsername] = useState(user.username || '');
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = () => {
     console.log("Saving username:", username);

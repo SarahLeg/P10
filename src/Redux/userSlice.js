@@ -16,7 +16,7 @@ export const loginUser = createAsyncThunk(
       'http://localhost:3001/api/v1/user/login',
       userData
     );
-    return data.body;  // On retourne le corps de la réponse contenant le token
+    return data.body;
   }
 );
 
@@ -26,10 +26,10 @@ export const getUser = createAsyncThunk(
   async (token) => {
     const { data } = await axios.get('http://localhost:3001/api/v1/user/profile', {
       headers: {
-        Authorization: `Bearer ${token}`,  // Correction : Utilisation des backticks pour les templates de chaînes
+        Authorization: `Bearer ${token}`,  
       },
     });
-    return data.body;  // On retourne les informations de l'utilisateur
+    return data.body; 
   }
 );
 
@@ -38,15 +38,15 @@ export const updateUser = createAsyncThunk(
   'userSlice/updateUser',
   async ({ username, token }) => {
     const { data } = await axios.put(
-      'http://localhost:3003/api/v1/user/profile', // Mettez l'URL correcte
+      'http://localhost:3001/api/v1/user/profile', 
       { username },
       {
         headers: {
-          Authorization: `Bearer ${token}`, // En-tête avec le token
+          Authorization: `Bearer ${token}`,
         },
       }
     );
-    return data.body; // Retourne les données mises à jour
+    return data.body;
   }
 );
 
@@ -59,7 +59,7 @@ const userSlice = createSlice({
     logout: (state) => {
       state.user = {};
       state.token = null;
-      localStorage.clear();  // Supprime tout du localStorage
+      localStorage.clear();
       state.loading = false;
       state.error = null;
     },

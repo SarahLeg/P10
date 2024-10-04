@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Importer useNavigate
+import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../Redux/userSlice';
 
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // Pour gérer les erreurs
-  const navigate = useNavigate(); // Pour la navigation
+  const [error, setError] = useState(null); 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Envoi de la requête de connexion
     dispatch(loginUser({ email, password }))
       .then((rep) => {
         console.log(rep.payload);
-        // Redirection vers la page des comptes après une connexion réussie
         navigate('/dashboard');
       })
       .catch((err) => {
-        // Gestion des erreurs
         setError('Invalid email or password');
-        console.error(err); // Pour déboguer en cas d'erreur
+        console.error(err);
       });
   };
 
