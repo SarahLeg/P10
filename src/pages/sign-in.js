@@ -6,6 +6,7 @@ import { loginUser } from '../Redux/userSlice';
 function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(null); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -16,6 +17,10 @@ function SignIn() {
     dispatch(loginUser({ email, password }))
       .then((rep) => {
         console.log(rep.payload);
+        if(rememberMe){
+          localStorage.setItem("token", rep.payload.token)
+        }
+        //le token va être stocké si rememberMe a été coché
         navigate('/dashboard');
       })
       .catch((err) => {
@@ -23,8 +28,6 @@ function SignIn() {
         console.error(err);
       });
   };
-
-  
 
   return (
     <main className="main bg-dark">
@@ -54,7 +57,7 @@ function SignIn() {
             />
           </div>
           <div className="input-remember">
-            <input type="checkbox" id="remember-me" />
+            <input type="checkbox" id="remember-me" onChange={(e) => setRememberMe(e.target.value)}/>
             <label htmlFor="remember-me">Remember me</label>
           </div>
           <button type="submit" className="sign-in-button">

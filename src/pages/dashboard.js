@@ -6,9 +6,7 @@ import { getUser } from '../Redux/userSlice';
 
 function Dashboard() {
   const dispatch = useDispatch();
-  const token = localStorage.getItem('token');
-  
-  // Récupérer les informations de l'utilisateur depuis Redux
+  const token = useSelector((state) => state.user.token);
   const user = useSelector((state) => state.user.user);
 
   useEffect(() => {

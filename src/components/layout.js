@@ -34,20 +34,20 @@ function Layout() {
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
 
-        <div>
+        <div className="main-nav-user">
           {token ? (
             <>
-              <span className="main-nav-item">
-                <img src={userIcon} alt="User Icon"/>
-                {user.userName || 'Loading...'}
+              <span className="main-nav-item user">
+                <span className="user-name">{user.userName || 'Loading...'}</span>
+                <img className="user-icon" src={userIcon} alt="User Icon"/>
               </span>
 
               <span className="main-nav-item">
-                <img src={optionsIcon} alt="Options"/>
+                <img className="user-icon" src={optionsIcon} alt="Options"/>
               </span>
 
               <span onClick={handleLogout} className="main-nav-item">
-                <img src={signoutIcon} alt="Sign Out"/>
+                <img className="user-icon" src={signoutIcon} alt="Sign Out"/>
               </span>
             </>
           ) : (

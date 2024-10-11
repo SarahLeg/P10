@@ -22,25 +22,27 @@ function EditUser({ user, token }) {
       {!isEditing ? (
         <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Name</button>
       ) : (
-        <form>
-          <label>
-            User name : 
-            <input
+        <form className="form" >
+          <label className='form-label' >
+            User name: 
+            <input className='form-input'
               type="text"
-              value={userName}
+              defaultValue={user.userName}
               onChange={(e) => setUsername(e.target.value)} // Modifiable
             />
           </label>
-          <label>
-            First name : 
-            <input type="text" value={user.firstName} disabled /> {/* Grisé */}
+          <label className='form-label' >
+            First name: 
+            <input className='form-input' type="text" value={user.firstName} disabled /> {/* Grisé */}
           </label>
-          <label>
-            Last name : 
-            <input type="text" value={user.lastName} disabled /> {/* Grisé */}
+          <label className='form-label' >
+            Last name: 
+            <input className='form-input' type="text" value={user.lastName} disabled /> {/* Grisé */}
           </label>
-          <button type="button" onClick={handleSave}>Save</button>
-          <button type="button" onClick={handleCancel}>Cancel</button>
+          <div>
+            <button className='form-button' type="button" onClick={handleSave}>Save</button>
+            <button className='form-button' type="button" onClick={handleCancel}>Cancel</button>
+          </div>
         </form>
       )}
     </div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const initialState = {
   user: {},           // Contient les informations de l'utilisateur
-  token: null,        // Token de l'utilisateur
+  token: localStorage.getItem("token") ? localStorage.getItem("token") : null,        // Token de l'utilisateur
   loading: false,     // Indicateur de chargement
   error: null,        // Gestion des erreurs
 };
@@ -90,7 +90,6 @@ const userSlice = createSlice({
     // Gestion du fulfilled pour `loginUser`
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.token = action.payload.token;   // Stockage du token
-      localStorage.setItem('token', action.payload.token);  // Stockage du token dans le localStorage
       state.error = null;  // Réinitialisation de l'erreur
       state.loading = false;  // Arrête le chargement
     });
