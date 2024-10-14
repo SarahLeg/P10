@@ -33,11 +33,11 @@ function EditUser({ user, token }) {
           </label>
           <label className='form-label' >
             First name: 
-            <input className='form-input' type="text" value={user.firstName} disabled /> {/* Grisé */}
+            <input className='form-input disabled' type="text" value={user.firstName} disabled /> {/* Grisé */}
           </label>
           <label className='form-label' >
             Last name: 
-            <input className='form-input' type="text" value={user.lastName} disabled /> {/* Grisé */}
+            <input className='form-input disabled' type="text" value={user.lastName} disabled /> {/* Grisé */}
           </label>
           <div>
             <button className='form-button' type="button" onClick={handleSave}>Save</button>

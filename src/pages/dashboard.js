@@ -16,7 +16,7 @@ function Dashboard() {
   }, [dispatch, token]);
 
   return (
-    <div className="body main bg-dark">
+    <div className="body main">
       <div className="header">
           <h1>Welcome back<br />{user ? `${user.firstName} ${user.lastName}` : 'User'}!</h1>
           <EditUser user={user} token={token}/>

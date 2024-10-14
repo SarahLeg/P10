@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 function Account({ title, amount, description }) {
 
@@ -10,7 +12,9 @@ function Account({ title, amount, description }) {
         <p className="account-amount-description">{description}</p>
       </div>
       <div className="account-content-wrapper cta">
-        <button>View transactions</button>
+        <button className='transaction-button'>
+          <FontAwesomeIcon icon={faChevronRight} className='arrow-icon'/>
+        </button>
       </div>
     </section>
   );

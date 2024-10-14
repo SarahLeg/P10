@@ -3,9 +3,10 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../Redux/userSlice';
 import Logo from '../assets/argentBankLogo.png';
-import userIcon from '../assets/circle-user-solid.svg';
-import optionsIcon from '../assets/gear-solid.svg';
-import signoutIcon from '../assets/power-off-solid.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -16,6 +17,10 @@ function Layout() {
 
   console.log('user:', user); 
   console.log('userName:', user.userName);
+
+  const handleUserClick = () => {
+    navigate('/dashboard')
+  }
 
   const handleLogout = () => {
     dispatch(logout());
@@ -37,22 +42,23 @@ function Layout() {
         <div className="main-nav-user">
           {token ? (
             <>
-              <span className="main-nav-item user">
-                <span className="user-name">{user.userName || 'Loading...'}</span>
-                <img className="user-icon" src={userIcon} alt="User Icon"/>
-              </span>
+              <button onClick={handleUserClick} className="user-item">
+                <p>{user.userName || 'Loading...'}</p>
+                <FontAwesomeIcon icon={faCircleUser} className='user-icon' />
+              </button>
 
-              <span className="main-nav-item">
-                <img className="user-icon" src={optionsIcon} alt="Options"/>
-              </span>
+              <button className="main-nav-item">
+                <FontAwesomeIcon icon={faGear} className='user-icon' />
+              </button>
 
-              <span onClick={handleLogout} className="main-nav-item">
-                <img className="user-icon" src={signoutIcon} alt="Sign Out"/>
-              </span>
+              <button onClick={handleLogout} className="main-nav-item">
+                <FontAwesomeIcon icon={faPowerOff} className='user-icon' />
+              </button>
             </>
           ) : (
-            <Link className="main-nav-item" to="/sign-in">
-              <i className="fa fa-user-circle"></i> Sign In
+            <Link className='sign-in' to="/sign-in">
+              <FontAwesomeIcon icon={faCircleUser}/>
+              Sign In
             </Link>
           )}
         </div>

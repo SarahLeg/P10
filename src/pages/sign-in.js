@@ -15,19 +15,22 @@ function SignIn() {
     event.preventDefault();
 
     dispatch(loginUser({ email, password }))
-      .then((rep) => {
-        console.log(rep.payload);
-        if(rememberMe){
-          localStorage.setItem("token", rep.payload.token)
+    .then((rep) => {
+      if (rep.payload) {
+        if (rememberMe) {
+          localStorage.setItem("token", rep.payload.token);
         }
-        //le token va être stocké si rememberMe a été coché
+        // le token va être stocké si rememberMe a été coché
         navigate('/dashboard');
-      })
-      .catch((err) => {
+      } else {
         setError('Invalid email or password');
-        console.error(err);
-      });
-  };
+        alert('Invalid email or password');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  }
 
   return (
     <main className="main bg-dark">
