@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const initialState = {
   user: {},           // Contient les informations de l'utilisateur
-  token: localStorage.getItem("token") ? localStorage.getItem("token") : null,        // Token de l'utilisateur
+  token: localStorage.getItem("token") ? localStorage.getItem("token") : null, // Token de l'utilisateur
   loading: false,     // Indicateur de chargement
   error: null,        // Gestion des erreurs
 };
@@ -19,7 +19,6 @@ export const loginUser = createAsyncThunk(
     return data.body;
   }
 );
-
 // Thunk pour obtenir les informations de l'utilisateur
 export const getUser = createAsyncThunk(
   'userSlice/getUser',
@@ -32,7 +31,6 @@ export const getUser = createAsyncThunk(
     return data.body; 
   }
 );
-
 // Thunk pour mettre à jour l'utilisateur
 export const updateUser = createAsyncThunk(
   'userSlice/updateUser',
@@ -49,7 +47,6 @@ export const updateUser = createAsyncThunk(
     return data.body;
   }
 );
-
 // Créer un slice pour l'utilisateur
 const userSlice = createSlice({
   name: 'userSlice',
@@ -100,7 +97,6 @@ const userSlice = createSlice({
       localStorage.clear();  // Supprime les données du localStorage
       state.error = action.error.message;  // Stocke le message d'erreur
       state.loading = false;  // Arrête le chargement
-      console.log(state.error);  // Affiche l'erreur dans la console
     });
 
 
